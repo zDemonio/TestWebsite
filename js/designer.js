@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Tasarım Durumu (State)
   const state = {
-    text: 'NEONART',
+    text: 'DEMOART',
     heightCm: 30,
     isLightOn: true,
     fontIndex: 0,
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function copySummaryText() {
     const len = Math.max(state.text.length, 1);
     const estWidth = Math.round(len * (state.heightCm * 0.72));
-    const text = `--- NEONART TABELA SİPARİŞ ÖZETİ ---
+    const text = `--- DEMOART TABELA SİPARİŞ ÖZETİ ---
 Yazı: "${state.text}"
 Harf Sayısı: ${state.text.length}
 Seçilen Harf Yüksekliği: ${state.heightCm} cm
