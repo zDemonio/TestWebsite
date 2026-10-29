@@ -1,5 +1,5 @@
 /**
- * Hex renk kodunu RGB nesnesine dönüştürür.
+ * Hex renk kodunu RGB nesnesine dönüştürür
  */
 function hexToRgb(hex) {
   let c = hex.replace('#', '');
