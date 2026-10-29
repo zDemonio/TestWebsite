@@ -1,4 +1,4 @@
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
 }
@@ -13,7 +13,7 @@
   background: #3b4763;
 }
 
-/* Genel Cam (Glass) Efekti */
+/* Genel Cam Efekti */
 .glass-panel {
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(14px);
