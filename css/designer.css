@@ -1,4 +1,4 @@
-/* Ambient pulse - Neon yanıp sönme canlı efekti */
+/* Neon yanıp sönme canlı efekti */
 @keyframes neonPulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.94; }
