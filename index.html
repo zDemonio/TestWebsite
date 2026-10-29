@@ -4,24 +4,19 @@
   <!-- ================= HEAD START ================= -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEMOART | Kurumsal Tabela & Neon Atölyesi</title>
+  <title>FAALİYET | Kurumsal Tabela & Neon Atölyesi</title>
+
   
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Great+Vibes&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@700;900&family=Orbitron:wght@700;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Righteous&family=Tilt+Neon&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Simgeleri -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Harici Özel CSS Dosyaları -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/designer.css">
 
-  <!-- Tailwind Tema Yapılandırması -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -58,7 +53,7 @@
           <i class="fa-solid fa-bolt-lightning text-slate-950 text-lg"></i>
         </div>
         <div>
-          <span class="text-xl font-extrabold tracking-wider text-white">DEMO<span class="text-amber-400">ART</span></span>
+          <span class="text-xl font-extrabold tracking-wider text-white">FAALİYET<span class="text-amber-400"> REKLAM</span></span>
           <span class="block text-[10px] tracking-widest text-slate-400 font-medium uppercase -mt-1">Tabela & Reklam Atölyesi</span>
         </div>
       </a>
@@ -112,12 +107,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="text-center max-w-3xl mx-auto space-y-6">
         
-        <!-- Hero Üst Rozet START -->
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-inner">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-          Yeni Nesil LED & Neon Tabela İmalatı
-        </div>
-        <!-- Hero Üst Rozet END -->
+
 
         <!-- Hero Başlık START -->
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
@@ -138,14 +128,11 @@
             <i class="fa-solid fa-pen-ruler"></i>
             Hemen Tasarla
           </a>
-          <a href="#portfolio" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-7 py-3.5 rounded-xl transition text-sm">
-            <i class="fa-solid fa-images text-slate-400"></i>
-            Yaptığımız İşler
-          </a>
+          
         </div>
         <!-- Hero Aksiyon Butonları END -->
 
-        <!-- Hero Avantaj Rozetleri (4'lü Grid) START -->
+        <!-- Hero Avantaj Rozetleri START -->
         <div class="pt-10 grid grid-cols-2 md:grid-cols-4 gap-4 text-left border-t border-slate-900">
           <!-- Avantaj 1 START -->
           <div class="flex items-center gap-3 p-3 bg-slate-900/40 rounded-xl border border-slate-800/60">
@@ -187,7 +174,7 @@
           </div>
           <!-- Avantaj 4 END -->
         </div>
-        <!-- Hero Avantaj Rozetleri (4'lü Grid) END -->
+        <!-- Hero Avantaj Rozetleri END -->
 
       </div>
     </div>
@@ -212,7 +199,7 @@
               </label>
               <span id="charCountLabel" class="text-xs font-mono text-slate-400">7 Harf</span>
             </div>
-            <input type="text" id="signText" maxlength="28" value="DEMOART" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="Tabelanızı yazın...">
+            <input type="text" id="signText" maxlength="28" value="FAALİYET" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="Tabelanızı yazın...">
           </div>
           <!-- Kontrol: Metin Girişi END -->
 
@@ -312,8 +299,8 @@
             <div id="ambientBackdrop" class="absolute w-[450px] sm:w-[600px] h-[220px] rounded-full blur-[110px] opacity-35 pointer-events-none transition-all duration-500" style="background-color: #f59e0b;"></div>
 
             <!-- Canlı Dinamik Tabela Başlığı -->
-            <h2 id="liveSignboard" class="neon-pulse-active select-none break-words max-w-full px-4 text-4xl sm:text-6xl md:text-7xl font-bold transition-all duration-300 tracking-wider" style="font-family: 'Tilt Neon', cursive; color: #ffffff;">
-              DEMOART
+            <h2 id="liveSignboard" class="neon-pulse-active select-none break-words max-w-full px-4 text-4xl sm:text-6xl md:text-7xl font-bold transition-all duration-300 tracking-wider" style="font-family: 'Tilt Neon', cursive; color: #ffffff; white-space: nowrap; flex-shrink: 0; width: max-content; display: inline-block;">
+              FAALİYET
             </h2>
           </div>
           <!-- Tabela Sahnesi END -->
@@ -620,7 +607,7 @@
               </div>
               <div>
                 <span class="block text-[11px] text-slate-500 font-medium">Instagram Hesabı</span>
-                <span class="font-bold text-white">@demoartz</span>
+                <span class="font-bold text-white">@FAALİYET</span>
               </div>
             </div>
             <!-- Insta END -->
@@ -632,7 +619,7 @@
               </div>
               <div>
                 <span class="block text-[11px] text-slate-500 font-medium">Kurumsal E-Posta</span>
-                <span class="font-bold text-white">info@demoarttabela.com</span>
+                <span class="font-bold text-white">info@FAALİYETtabela.com</span>
               </div>
             </div>
             <!-- E-posta END -->
@@ -643,8 +630,8 @@
                 <i class="fa-solid fa-location-dot"></i>
               </div>
               <div>
-                <span class="block text-[11px] text-slate-500 font-medium">Üretim Atölyesi</span>
-                <span class="font-bold text-white">İvedik OSB Reklamcılar Sanayi Sitesi, Ankara</span>
+                <span class="block text-[11px] text-slate-500 font-medium">Konum</span>
+                <span class="font-bold text-white">İstanbul </span>
               </div>
             </div>
             <!-- Adres END -->
@@ -674,7 +661,7 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-300 mb-1">E-posta Adresiniz</label>
-                <input name="email" type="email" required placeholder="ornek@mail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400">
+                <input name="email" type="email" required placeholder="ornek@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400">
               </div>
             </div>
             <!-- Telefon & Mail Grid END -->
@@ -720,7 +707,7 @@
       <!-- Telif & Logo START -->
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
-        <span class="text-slate-300 font-bold">DEMOART</span>
+        <span class="text-slate-300 font-bold">FAALİYET</span>
         <span>© 2026 Tüm Hakları Saklıdır.</span>
       </div>
       <!-- Telif & Logo END -->
