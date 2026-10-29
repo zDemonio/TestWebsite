@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Tasarım Durumu (State)
   const state = {
-    text: 'DEMOART',
+    text: 'FAALİYET',
     heightCm: 30,
     isLightOn: true,
     fontIndex: 0,
@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const quoteMessage = document.getElementById('quoteMessage');
   const copySignSummary = document.getElementById('copySignSummary');
   const quoteForm = document.getElementById('quoteForm');
+
 
   if (!signText || !liveSignboard) return; // Designer yoksa çalıştırma
 
@@ -186,7 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
     specHeight.innerText = `${state.heightCm} cm`;
 
     const len = Math.max(state.text.length, 1);
-    const estWidth = Math.round(len * (state.heightCm * 0.72));
+    const liveSignboardProp = liveSignboard.getBoundingClientRect();
+    const LSBHeight = liveSignboardProp.height;
+    const LSBWidth = Math.max(liveSignboard.scrollWidth, liveSignboardProp.width);
+    const estWidth = Math.round((state.heightCm/LSBHeight)*LSBWidth);
     specEstWidth.innerText = `~${estWidth} cm`;
 
     if (quoteMessage) {
@@ -197,8 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Özeti Panoya Kopyalama
   function copySummaryText() {
     const len = Math.max(state.text.length, 1);
-    const estWidth = Math.round(len * (state.heightCm * 0.72));
-    const text = `--- DEMOART TABELA SİPARİŞ ÖZETİ ---
+    const liveSignboardProp = liveSignboard.getBoundingClientRect();
+    const LSBHeight = liveSignboardProp.height;
+    const LSBWidth = Math.max(liveSignboard.scrollWidth, liveSignboardProp.width);
+    const estWidth = Math.round((state.heightCm/LSBHeight)*LSBWidth);
+    const text = `--- FAALİYET TABELA SİPARİŞ ÖZETİ ---
 Yazı: "${state.text}"
 Harf Sayısı: ${state.text.length}
 Seçilen Harf Yüksekliği: ${state.heightCm} cm
