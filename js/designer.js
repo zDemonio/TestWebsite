@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Sabitler
+  // Sabitler.
   const HEIGHT_OPTIONS = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
 
   const FONT_OPTIONS = [
