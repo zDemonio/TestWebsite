@@ -206,14 +206,14 @@
               <div>
                 <label for="facadeHeightInput" class="block text-[11px] font-medium text-slate-400 mb-1">Yükseklik</label>
                 <div class="relative">
-                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 80" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                   <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
                 </div>
               </div>
               <div>
                 <label for="facadeWidthInput" class="block text-[11px] font-medium text-slate-400 mb-1">Genişlik</label>
                 <div class="relative">
-                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 500" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                   <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
                 </div>
               </div>
@@ -261,44 +261,59 @@
           </div>
           <!-- Kontrol: Font Stili Seçimi END -->
 
-          <!-- Kontrol: Renk Seçimi & Color Picker START -->
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-palette text-amber-400"></i> Renk Seçimi
-              </label>
-              <span id="colorHexText" class="text-xs font-mono font-bold text-amber-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">#F59E0B</span>
-            </div>
-            <div class="flex items-center gap-2.5">
-              <!-- JS Tarafından Doldurulan Renk Paletleri -->
-              <div id="colorSwatches" class="flex flex-wrap gap-2 flex-1"></div>
-              
-              <!-- Özel HTML5 Color Picker Butonu -->
-              <div class="relative w-9 h-9 rounded-xl border border-slate-700 bg-slate-800 hover:border-slate-500 flex items-center justify-center cursor-pointer overflow-hidden transition" title="Özel Renk Belirle">
-                <input type="color" id="customColorInput" value="#f59e0b" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
-                <i class="fa-solid fa-eye-dropper text-xs text-slate-300 pointer-events-none"></i>
+          <!-- Kontrol: Renk Seçenekleri START -->
+          <div class="space-y-4">
+            <div id="lightColorRow" class="grid grid-cols-2 gap-3">
+              <div id="lightColorControl" class="col-span-2">
+                <div class="flex justify-between items-center mb-2">
+                  <label for="customColorInput" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-400"></i> Işık Rengi
+                  </label>
+                  <span id="colorHexText" class="text-xs font-mono font-bold text-amber-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">#F59E0B</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <div id="colorSwatches" class="flex flex-wrap gap-2 flex-1"></div>
+                  <div class="relative w-9 h-9 rounded-xl border border-slate-700 bg-slate-800 hover:border-slate-500 flex items-center justify-center cursor-pointer overflow-hidden transition" title="Özel Işık Rengi Belirle">
+                    <input type="color" id="customColorInput" value="#f59e0b" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+                    <i class="fa-solid fa-eye-dropper text-xs text-slate-300 pointer-events-none"></i>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <!-- Kontrol: Renk Seçimi & Color Picker END -->
 
-          <!-- Kontrol: Yan Işık Rengi START -->
-          <div id="sideColorControl" class="hidden">
-            <div class="flex justify-between items-center mb-2">
-              <label for="sideColorInput" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-lightbulb text-cyan-400"></i> Yan Işık Rengi
-              </label>
-              <span id="sideColorHexText" class="text-xs font-mono font-bold text-cyan-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">#38BDF8</span>
+              <div id="sideColorControl" class="hidden">
+                <div class="flex justify-between items-center mb-2">
+                  <label for="sideColorInput" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-cyan-400"></i> Yan Işık Rengi
+                  </label>
+                  <span id="sideColorHexText" class="text-xs font-mono font-bold text-cyan-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">#38BDF8</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <div id="sideColorSwatches" class="flex flex-wrap gap-2 flex-1"></div>
+                  <div class="relative w-9 h-9 rounded-xl border border-slate-700 bg-slate-800 hover:border-slate-500 flex items-center justify-center cursor-pointer overflow-hidden transition" title="Özel Yan Işık Rengi Belirle">
+                    <input type="color" id="sideColorInput" value="#38bdf8" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+                    <i class="fa-solid fa-eye-dropper text-xs text-slate-300 pointer-events-none"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="flex items-center gap-2.5">
-              <div id="sideColorSwatches" class="flex flex-wrap gap-2 flex-1"></div>
-              <div class="relative w-9 h-9 rounded-xl border border-slate-700 bg-slate-800 hover:border-slate-500 flex items-center justify-center cursor-pointer overflow-hidden transition" title="Özel Yan Işık Rengi Belirle">
-                <input type="color" id="sideColorInput" value="#38bdf8" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
-                <i class="fa-solid fa-eye-dropper text-xs text-slate-300 pointer-events-none"></i>
+
+            <div id="textColorControl">
+              <div class="flex justify-between items-center mb-2">
+                <label for="customTextColorInput" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                  <i class="fa-solid fa-font text-amber-400"></i> Yazı Rengi
+                </label>
+                <span id="textColorHexText" class="text-xs font-mono font-bold text-amber-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">#F8FAFC</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div id="textColorSwatches" class="flex flex-wrap gap-2 flex-1"></div>
+                <div class="relative w-9 h-9 rounded-xl border border-slate-700 bg-slate-800 hover:border-slate-500 flex items-center justify-center cursor-pointer overflow-hidden transition" title="Özel Yazı Rengi Belirle">
+                  <input type="color" id="customTextColorInput" value="#f8fafc" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer">
+                  <i class="fa-solid fa-eye-dropper text-xs text-slate-300 pointer-events-none"></i>
+                </div>
               </div>
             </div>
           </div>
-          <!-- Kontrol: Yan Işık Rengi END -->
+          <!-- Kontrol: Renk Seçenekleri END -->
 
         </div>
         <!-- Sol Kontrol Paneli Sütunu END -->
@@ -324,7 +339,7 @@
           <!-- Tabela Sahnesi (Yazı ve Işık Efekti) START -->
           <div class="my-auto py-12 flex items-center justify-center relative z-10 overflow-hidden text-center">
             <!-- Arka Plan Ambiyans Işığı (Backdrop Glow) -->
-            <div id="ambientBackdrop" class="absolute w-[450px] sm:w-[600px] h-[220px] rounded-full blur-[110px] opacity-35 pointer-events-none transition-all duration-500" style="background-color: #f59e0b;"></div>
+            <div id="ambientBackdrop" class="absolute rounded-full blur-[45px] opacity-35 pointer-events-none transition-all duration-500" style="background-color: #f59e0b;"></div>
 
             <!-- Canlı Dinamik Tabela Başlığı -->
             <h2 id="liveSignboard" class="neon-pulse-active select-none break-words max-w-full px-4 text-4xl sm:text-6xl md:text-7xl font-bold transition-all duration-300 tracking-wider" style="font-family: 'Tilt Neon', cursive; color: #ffffff; white-space: nowrap; flex-shrink: 0; width: max-content; display: inline-block;">

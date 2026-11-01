@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isLightOn: true,
     productTypeId: 'front-lit',
     fontIndex: 0,
-    color: '#f59e0b',
+    lightColor: '#f59e0b',
+    textColor: '#f8fafc',
     sideColor: '#38bdf8'
   };
 
@@ -55,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightOffBtn = document.getElementById('lightOffBtn');
   const productTypeOptions = document.getElementById('productTypeOptions');
   const productTypeLabel = document.getElementById('productTypeLabel');
+  const lightColorRow = document.getElementById('lightColorRow');
+  const lightColorControl = document.getElementById('lightColorControl');
+  const textColorControl = document.getElementById('textColorControl');
   const sideColorControl = document.getElementById('sideColorControl');
   const sideColorInput = document.getElementById('sideColorInput');
   const sideColorSwatches = document.getElementById('sideColorSwatches');
@@ -66,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorSwatches = document.getElementById('colorSwatches');
   const customColorInput = document.getElementById('customColorInput');
   const colorHexText = document.getElementById('colorHexText');
+  const textColorSwatches = document.getElementById('textColorSwatches');
+  const customTextColorInput = document.getElementById('customTextColorInput');
+  const textColorHexText = document.getElementById('textColorHexText');
 
   const specLetterCount = document.getElementById('specLetterCount');
   const specFacadeHeight = document.getElementById('specFacadeHeight');
@@ -132,48 +139,26 @@ document.addEventListener('DOMContentLoaded', () => {
     currentFontName.innerText = FONT_OPTIONS[state.fontIndex].name;
   }
 
-  // Renk paletini çiz
-  function buildColors() {
-    colorSwatches.innerHTML = '';
+  function buildColorPalette(container, input, hexLabel, stateKey, description) {
+    container.innerHTML = '';
     COLOR_PRESETS.forEach(c => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      const isSelected = (state.color.toLowerCase() === c.hex.toLowerCase());
+      const isSelected = state[stateKey].toLowerCase() === c.hex.toLowerCase();
       btn.className = `w-7 h-7 rounded-lg transition-transform ${
         isSelected ? 'ring-2 ring-white scale-110 shadow-md' : 'opacity-85 hover:scale-105'
       }`;
       btn.style.backgroundColor = c.hex;
-      btn.title = c.name;
+      btn.title = `${c.name} ${description}`;
+      btn.setAttribute('aria-label', `${c.name} ${description} rengini seç`);
       btn.addEventListener('click', () => {
-        state.color = c.hex;
-        customColorInput.value = c.hex;
+        state[stateKey] = c.hex;
+        input.value = c.hex;
         render();
       });
-      colorSwatches.appendChild(btn);
+      container.appendChild(btn);
     });
-    colorHexText.innerText = state.color.toUpperCase();
-  }
-
-  function buildSideColors() {
-    sideColorSwatches.innerHTML = '';
-    COLOR_PRESETS.forEach(c => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      const isSelected = state.sideColor.toLowerCase() === c.hex.toLowerCase();
-      btn.className = `w-7 h-7 rounded-lg transition-transform ${
-        isSelected ? 'ring-2 ring-white scale-110 shadow-md' : 'opacity-85 hover:scale-105'
-      }`;
-      btn.style.backgroundColor = c.hex;
-      btn.title = `${c.name} yan ışık`;
-      btn.setAttribute('aria-label', `${c.name} yan ışık rengini seç`);
-      btn.addEventListener('click', () => {
-        state.sideColor = c.hex;
-        sideColorInput.value = c.hex;
-        render();
-      });
-      sideColorSwatches.appendChild(btn);
-    });
-    sideColorHexText.innerText = state.sideColor.toUpperCase();
+    hexLabel.innerText = state[stateKey].toUpperCase();
   }
 
   // Canlı Simülasyonu Güncelleme Fonksiyonu
@@ -187,37 +172,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const font = FONT_OPTIONS[state.fontIndex];
     liveSignboard.style.fontFamily = font.family;
+    const signBounds = liveSignboard.getBoundingClientRect();
     buildFonts();
 
-    buildColors();
-    const rgb = hexToRgb(state.color);
+    buildColorPalette(colorSwatches, customColorInput, colorHexText, 'lightColor', 'ışık');
+    buildColorPalette(textColorSwatches, customTextColorInput, textColorHexText, 'textColor', 'yazı');
+    buildColorPalette(sideColorSwatches, sideColorInput, sideColorHexText, 'sideColor', 'yan ışık');
+    const rgb = hexToRgb(state.lightColor);
     const rgba = (a) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
     const sideRgb = hexToRgb(state.sideColor);
     const sideRgba = (a) => `rgba(${sideRgb.r}, ${sideRgb.g}, ${sideRgb.b}, ${a})`;
     const productType = renderProductTypeOptions();
-    const hasSideLighting = productType.id === 'front-side-lit' || productType.id === 'side-lit';
+    const isBacklit = state.isLightOn && productType.id === 'backlit';
+    const hasSideLighting = state.isLightOn && productType.id === 'front-side-lit';
+    const isChrome = !state.isLightOn && productType.id === 'stainless';
+    ambientBackdrop.style.width = `${signBounds.width + (isBacklit ? 70 : 40)}px`;
+    ambientBackdrop.style.height = `${signBounds.height + 20}px`;
+    ambientBackdrop.style.filter = isBacklit ? 'blur(34px)' : '';
+    lightColorRow.classList.toggle('hidden', !state.isLightOn);
+    lightColorControl.classList.toggle('col-span-2', !hasSideLighting);
+    textColorControl.classList.toggle('hidden', isChrome);
     sideColorControl.classList.toggle('hidden', !hasSideLighting);
-    buildSideColors();
 
     if (state.isLightOn) {
-      liveSignboard.style.color = productType.id === 'backlit' || productType.id === 'side-lit' ? state.color : '#ffffff';
+      liveSignboard.style.color = state.textColor;
 
-      if (productType.id === 'backlit') {
-        liveSignboard.style.textShadow = `0 0 4px ${rgba(0.45)}, 0 0 12px ${rgba(0.65)}`;
-        ambientBackdrop.style.opacity = '0.55';
+      if (isBacklit) {
+        liveSignboard.style.textShadow = `0 0 2px ${rgba(0.85)}, 0 0 8px ${rgba(0.7)}, 0 0 16px ${rgba(0.45)}`;
+        ambientBackdrop.style.opacity = '0.18';
       } else if (productType.id === 'front-lit') {
-        liveSignboard.style.textShadow = `0 0 4px #ffffff, 0 0 12px ${rgba(0.9)}, 0 0 28px ${rgba(0.65)}`;
-        ambientBackdrop.style.opacity = '0.22';
+        liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}`;
+        ambientBackdrop.style.opacity = '0';
       } else if (productType.id === 'front-side-lit') {
-        liveSignboard.style.textShadow = `0 0 4px #ffffff, 0 0 12px ${rgba(0.9)}, 0 0 28px ${rgba(0.6)}, 2px 0 3px ${sideRgba(1)}, -2px 0 3px ${sideRgba(1)}, 5px 0 14px ${sideRgba(0.9)}, -5px 0 14px ${sideRgba(0.9)}`;
-        ambientBackdrop.style.opacity = '0.4';
+        liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}, 4px 0 6px ${sideRgba(1)}, 10px 0 16px ${sideRgba(0.8)}, 16px 0 24px ${sideRgba(0.45)}`;
+        ambientBackdrop.style.opacity = '0';
       } else {
-        liveSignboard.style.textShadow = `0 0 2px #ffffff, 2px 0 3px ${sideRgba(1)}, -2px 0 3px ${sideRgba(1)}, 5px 0 12px ${sideRgba(0.9)}, -5px 0 12px ${sideRgba(0.9)}`;
-        ambientBackdrop.style.opacity = '0.12';
+        liveSignboard.style.textShadow = `4px 0 6px ${sideRgba(1)}, 10px 0 16px ${sideRgba(0.8)}, 16px 0 24px ${sideRgba(0.45)}`;
+        ambientBackdrop.style.opacity = '0';
       }
 
       liveSignboard.classList.add('neon-pulse-active');
-      ambientBackdrop.style.backgroundColor = hasSideLighting ? state.sideColor : state.color;
+      ambientBackdrop.style.backgroundColor = state.lightColor;
 
       lightOnBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md';
       lightOffBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all';
@@ -226,11 +221,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (productType.id === 'stainless') {
         liveSignboard.style.color = '#d1d5db';
         liveSignboard.style.textShadow = '1px 1px 0 #ffffff, 2px 3px 2px rgba(0,0,0,0.9), 0 0 12px rgba(203,213,225,0.35)';
-      } else if (productType.id === 'foam') {
-        liveSignboard.style.color = state.color;
+      } else if (productType.id === 'foam' || productType.id === 'painted') {
+        liveSignboard.style.color = state.textColor;
         liveSignboard.style.textShadow = '1px 1px 0 rgba(255,255,255,0.3), 3px 4px 0 rgba(15,23,42,0.9), 5px 7px 8px rgba(0,0,0,0.65)';
       } else {
-        liveSignboard.style.color = state.color;
+        liveSignboard.style.color = state.textColor;
         liveSignboard.style.textShadow = '1px 1px 0 rgba(0,0,0,0.85), 3px 4px 7px rgba(0,0,0,0.65)';
       }
       liveSignboard.classList.remove('neon-pulse-active');
@@ -247,8 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
     specFacadeHeight.innerText = facadeHeight;
     specFacadeWidth.innerText = facadeWidth;
 
+    const colorDetails = [];
+    if (!isChrome) colorDetails.push(`• Yazı Rengi: ${state.textColor.toUpperCase()}`);
+    if (state.isLightOn) colorDetails.push(`• Işık Rengi: ${state.lightColor.toUpperCase()}`);
+    if (hasSideLighting) colorDetails.push(`• Yan Işık Rengi: ${state.sideColor.toUpperCase()}`);
+    const colorDetailsText = colorDetails.length ? `\n${colorDetails.join('\n')}` : '';
+
     if (quoteMessage) {
-      quoteMessage.value = `Merhaba, siteden yapılandırdığım tabela için teklif almak istiyorum:\n• Yazı: "${state.text}"\n• Cephe Yüksekliği: ${facadeHeight}\n• Cephe Genişliği: ${facadeWidth}\n• Model: ${productType.name}\n• Renk Kodu: ${state.color.toUpperCase()}${hasSideLighting ? `\n• Yan Işık Rengi: ${state.sideColor.toUpperCase()}` : ''}`;
+      quoteMessage.value = `Merhaba, siteden yapılandırdığım tabela için teklif almak istiyorum:\n• Yazı: "${state.text}"\n• Cephe Yüksekliği: ${facadeHeight}\n• Cephe Genişliği: ${facadeWidth}\n• Model: ${productType.name}${colorDetailsText}`;
     }
   }
 
@@ -263,8 +264,8 @@ Cephe Yüksekliği: ${facadeHeight}
 Cephe Genişliği: ${facadeWidth}
 Aydınlatma: ${state.isLightOn ? 'Işıklı (Neon / LED)' : 'Işıksız (Kutu Harf)'}
 Model: ${PRODUCT_TYPES[state.isLightOn ? 'lighted' : 'unlighted'].find(option => option.id === state.productTypeId).name}
-Renk Kodu: ${state.color.toUpperCase()}
-${state.productTypeId === 'front-side-lit' || state.productTypeId === 'side-lit' ? `Yan Işık Rengi: ${state.sideColor.toUpperCase()}\n` : ''}Font: ${FONT_OPTIONS[state.fontIndex].name}
+${colorDetails.map(detail => detail.replace(/^• /, '')).join('\n')}
+Font: ${FONT_OPTIONS[state.fontIndex].name}
 -------------------------------------`;
 
     const el = document.createElement('textarea');
@@ -307,7 +308,12 @@ ${state.productTypeId === 'front-side-lit' || state.productTypeId === 'side-lit'
   });
 
   customColorInput.addEventListener('input', (e) => {
-    state.color = e.target.value;
+    state.lightColor = e.target.value;
+    render();
+  });
+
+  customTextColorInput.addEventListener('input', (e) => {
+    state.textColor = e.target.value;
     render();
   });
 
@@ -365,4 +371,5 @@ ${state.productTypeId === 'front-side-lit' || state.productTypeId === 'side-lit'
 
   // İlk başlatma
   render();
+  document.fonts.ready.then(render);
 });
