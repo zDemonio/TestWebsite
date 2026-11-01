@@ -201,13 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
         liveSignboard.style.textShadow = `0 0 2px ${rgba(0.85)}, 0 0 8px ${rgba(0.7)}, 0 0 16px ${rgba(0.45)}`;
         ambientBackdrop.style.opacity = '0.18';
       } else if (productType.id === 'front-lit') {
-        liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}`;
+        liveSignboard.style.textShadow = `0 0 5px #ffffff, 0 0 8px ${rgba(1)}, 0 0 20px ${rgba(0.95)}, 0 0 32px ${rgba(0.7)}`;
         ambientBackdrop.style.opacity = '0';
       } else if (productType.id === 'front-side-lit') {
-        liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}, 4px 0 6px ${sideRgba(1)}, 10px 0 16px ${sideRgba(0.8)}, 16px 0 24px ${sideRgba(0.45)}`;
+        liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}, 5px 0 7px ${sideRgba(1)}, 10px 0 13px ${sideRgba(0.8)}, 13px 0 19px ${sideRgba(0.45)}`;
         ambientBackdrop.style.opacity = '0';
       } else {
-        liveSignboard.style.textShadow = `4px 0 6px ${sideRgba(1)}, 10px 0 16px ${sideRgba(0.8)}, 16px 0 24px ${sideRgba(0.45)}`;
+        liveSignboard.style.textShadow = `3px 0 4px ${sideRgba(1)}, 7px 0 9px ${sideRgba(0.8)}, 9px 0 14px ${sideRgba(0.45)}`;
         ambientBackdrop.style.opacity = '0';
       }
 
