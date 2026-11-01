@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         liveSignboard.style.textShadow = `0 0 3px #ffffff, 0 0 8px ${rgba(1)}, 0 0 18px ${rgba(0.95)}, 0 0 26px ${rgba(0.7)}, 5px 0 7px ${sideRgba(1)}, 10px 0 13px ${sideRgba(0.8)}, 13px 0 19px ${sideRgba(0.45)}`;
         ambientBackdrop.style.opacity = '0';
       } else {
-        liveSignboard.style.textShadow = `3px 0 4px ${sideRgba(1)}, 7px 0 9px ${sideRgba(0.8)}, 9px 0 14px ${sideRgba(0.45)}`;
+        liveSignboard.style.textShadow = `3px 0 4px ${rgba(1)}, 7px 0 9px ${rgba(0.8)}, 9px 0 14px ${rgba(0.45)}`;
         ambientBackdrop.style.opacity = '0';
       }
 
