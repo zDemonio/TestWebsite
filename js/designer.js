@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const COLOR_PRESETS = [
     { name: 'Gece', hex: '#0b0f19' },
-    { name: 'Saf Beyaz', hex: '#f8fafc' },
+    { name: 'Beyaz', hex: '#f8fafc' },
     { name: 'Buz Mavisi', hex: '#38bdf8' },
     { name: 'Alev Kırmızı', hex: '#ef4444' },
     { name: 'Zümrüt Yeşil', hex: '#10b981' },
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sceneColor: '#0b0f19'
   };
 
-  // DOM Elemanları
+
   const signText = document.getElementById('signText');
   const liveSignboard = document.getElementById('liveSignboard');
   const ambientBackdrop = document.getElementById('ambientBackdrop');
