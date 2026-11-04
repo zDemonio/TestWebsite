@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lightColor: '#38bdf8',
     textColor: '#f8fafc',
     sideColor: '#a855f7',
-    sceneColor: '#0b0f19'
+    sceneColor: '#1e293b'
   };
 
 
