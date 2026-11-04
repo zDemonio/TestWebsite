@@ -1,0 +1,28 @@
+/* Ambient pulse - Neon yanıp sönme canlı efekti */
+@keyframes neonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.94; }
+}
+
+.neon-pulse-active {
+  animation: neonPulse 3.5s ease-in-out infinite alternate;
+}
+
+/* Sahne köşelerine hafif geçiş; tabela katmanının arkasında kalır. */
+.bg-studio-grid {
+  background-color: var(--scene-background, #0b0f19);
+}
+
+.bg-studio-grid::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 38%,
+    rgba(2, 6, 23, 0.08) 72%,
+    rgba(2, 6, 23, 0.58) 100%
+  );
+}
