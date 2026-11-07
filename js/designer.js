@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Sabitler
+  // ================= SABİTLER START =================
+  // Fiziksel harf yüksekliği için hazır ölçüler
+  const HEIGHT_OPTIONS = [15, 20, 25, 30, 35, 40, 45, 50, 55];
+
+  // Önizlemede kullanılabilen yazı tipleri
   const FONT_OPTIONS = [
     { id: 'tilt', name: 'Tilt Neon', family: "'Tilt Neon', cursive" },
     { id: 'montserrat', name: 'Montserrat Bold', family: "'Montserrat', sans-serif" },
@@ -7,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'cinzel', name: 'Cinzel Serif', family: "'Cinzel', serif" }
   ];
 
+  // Işık ve yazı rengi için hazır renkler
   const COLOR_PRESETS = [
     { name: 'Gece', hex: '#0b0f19' },
     { name: 'Beyaz', hex: '#f8fafc' },
@@ -16,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Elektrik Mor', hex: '#a855f7' }
   ];
 
+  // Önizleme sahnesinin arka plan renkleri
   const SCENE_COLOR_PRESETS = [
     { name: 'Arduvaz', hex: '#1e293b' },
     { name: 'Kemik', hex: '#f4ede4' },
@@ -26,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Espresso', hex: '#291814' }
   ];
 
+  // Aydınlatma moduna göre gösterilen tabela türleri
   const PRODUCT_TYPES = {
     lighted: [
       { id: 'backlit', name: 'Arkadan Zemine Işıklı' },
@@ -39,22 +46,36 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'painted', name: 'Boyalı Harf' }
     ]
   };
+  // ================= SABİTLER END =================
 
-  // Tasarım Durumu (State)
+  // ================= TASARIM DURUMU START =================
   const state = {
+    // Tabela metni ve fiziksel ölçüler
     text: 'FAALİYET',
+    heightCm: 30,
+    isCustomHeightInputOpen: false,
     facadeHeightCm: '',
     facadeWidthCm: '',
+    // Aydınlatma ve tabela modeli seçimi
     isLightOn: true,
+    isProductTypeOptionsOpen: false,
     productTypeId: 'front-lit',
+    // Önizleme görünüm tercihleri
     fontIndex: 0,
     lightColor: '#38bdf8',
     textColor: '#f8fafc',
     sideColor: '#a855f7',
     sceneColor: '#1e293b'
   };
+  // ================= TASARIM DURUMU END =================
 
-
+  // ================= DOM ELEMANLARI START =================
+  // Harf yüksekliği kontrolleri
+  const selectedHeightBadge = document.getElementById('selectedHeightBadge');
+  const heightButtonsContainer = document.getElementById('heightButtonsContainer');
+  const customHeightInput = document.getElementById('customHeightInput');
+  const customHeightInputWrapper = document.getElementById('customHeightInputWrapper');
+  // Tabela metni ve canlı önizleme alanları
   const signText = document.getElementById('signText');
   const liveSignboard = document.getElementById('liveSignboard');
   const ambientBackdrop = document.getElementById('ambientBackdrop');
@@ -62,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const facadeHeightInput = document.getElementById('facadeHeightInput');
   const facadeWidthInput = document.getElementById('facadeWidthInput');
 
+  // Aydınlatma ve ürün türü kontrolleri
   const lightOnBtn = document.getElementById('lightOnBtn');
   const lightOffBtn = document.getElementById('lightOffBtn');
   const productTypeOptions = document.getElementById('productTypeOptions');
@@ -74,9 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const sideColorSwatches = document.getElementById('sideColorSwatches');
   const sideColorHexText = document.getElementById('sideColorHexText');
 
+  // Yazı tipi kontrolleri
   const fontContainer = document.getElementById('fontContainer');
   const currentFontName = document.getElementById('currentFontName');
 
+  // Işık ve yazı rengi kontrolleri
   const colorSwatches = document.getElementById('colorSwatches');
   const customColorInput = document.getElementById('customColorInput');
   const colorHexText = document.getElementById('colorHexText');
@@ -84,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const customTextColorInput = document.getElementById('customTextColorInput');
   const textColorHexText = document.getElementById('textColorHexText');
 
+  // Teknik özet, teklif formu ve sahne rengi kontrolleri
+  const specEstWidth = document.getElementById('specEstWidth');
   const specLetterCount = document.getElementById('specLetterCount');
   const specFacadeHeight = document.getElementById('specFacadeHeight');
   const specLightType = document.getElementById('specLightType');
@@ -98,19 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const sceneColorPreview = document.getElementById('sceneColorPreview');
   const sceneContainer = document.querySelector('.bg-studio-grid');
   let customSceneColorInput;
+  // ================= DOM ELEMANLARI END =================
 
 
   if (!signText || !liveSignboard) return; // Designer yoksa çalıştırma
 
+  // ================= TABELA MODELİ SEÇENEKLERİ START =================
   function renderProductTypeOptions() {
+    // Mod ile uyumlu ürün türlerini seç ve geçersiz seçimi düzelt
     const options = state.isLightOn ? PRODUCT_TYPES.lighted : PRODUCT_TYPES.unlighted;
     if (!options.some(option => option.id === state.productTypeId)) {
       state.productTypeId = options[0].id;
     }
 
-    productTypeLabel.innerHTML = `<i class="fa-solid fa-layer-group text-amber-400"></i> ${state.isLightOn ? 'Işıklı Model' : 'Harf Malzemesi'}`;
+    // Seçili ürünü ve açılır listenin görünümünü güncelle
+    const selectedOption = options.find(option => option.id === state.productTypeId);
+    productTypeLabel.innerHTML = `<span><i class="fa-solid fa-layer-group text-amber-400 mr-1"></i> ${selectedOption.name}</span><i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform ${state.isProductTypeOptionsOpen ? 'rotate-180' : ''}"></i>`;
+    productTypeOptions.classList.toggle('hidden', !state.isProductTypeOptionsOpen);
+    productTypeOptions.classList.toggle('grid', state.isProductTypeOptionsOpen);
+    productTypeLabel.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
+    lightOnBtn.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
+    lightOffBtn.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
     productTypeOptions.innerHTML = '';
 
+    // Ürün türü seçim butonlarını oluştur
     options.forEach(option => {
       const isSelected = state.productTypeId === option.id;
       const button = document.createElement('button');
@@ -124,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
       button.textContent = option.name;
       button.addEventListener('click', () => {
         state.productTypeId = option.id;
+        state.isProductTypeOptionsOpen = false;
         render();
       });
       productTypeOptions.appendChild(button);
@@ -131,10 +169,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return options.find(option => option.id === state.productTypeId);
   }
+  // ================= TABELA MODELİ SEÇENEKLERİ END =================
 
-  // Font seçim butonlarını çiz
+  // ================= YÜKSEKLİK SEÇENEKLERİ START =================
+  function renderHeightButtons() {
+    heightButtonsContainer.innerHTML = '';
+
+    // Hazır ve özel ölçü düğmeleri için ortak görünüm oluşturucu
+    const renderOptionButton = (label, isSelected, onClick, title) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-pressed', String(isSelected));
+      if (isSelected) {
+        btn.className = 'w-full py-2.5 px-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-slate-950 border-2 border-white shadow-lg shadow-amber-500/40 flex items-center justify-center gap-1';
+        btn.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> ${label}`;
+      } else {
+        btn.className = 'w-full py-2.5 px-1 rounded-xl text-xs font-semibold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700 flex items-center justify-center';
+        btn.innerText = label;
+      }
+      btn.title = title;
+      btn.addEventListener('click', onClick);
+      heightButtonsContainer.appendChild(btn);
+      return btn;
+    };
+
+    // Hazır ölçü butonları
+    HEIGHT_OPTIONS.forEach(val => {
+      const button = renderOptionButton(`${val}`, state.heightCm === val, () => {
+        state.heightCm = val;
+        state.isCustomHeightInputOpen = false;
+        render();
+      }, `${val} cm harf yüksekliği`);
+      button.dataset.height = String(val);
+    });
+
+    // Özel ölçü butonu ve giriş alanı
+    const isCustomHeight = state.heightCm !== '' && !HEIGHT_OPTIONS.includes(state.heightCm);
+    const customHeightButton = renderOptionButton('Diğer', isCustomHeight, () => {
+      state.isCustomHeightInputOpen = true;
+      customHeightInputWrapper.classList.remove('hidden');
+      customHeightInput.focus();
+    }, 'İstediğiniz harf yüksekliğini girin');
+    customHeightButton.setAttribute('aria-label', isCustomHeight ? `Özel yükseklik: ${state.heightCm} cm` : 'Özel yükseklik gir');
+    customHeightInput.value = isCustomHeight ? state.heightCm : '';
+    customHeightInputWrapper.classList.toggle('hidden', !state.isCustomHeightInputOpen);
+    selectedHeightBadge.innerText = state.heightCm ? `Seçili: ${state.heightCm} cm` : 'Yükseklik girin';
+  }
+  // ================= YÜKSEKLİK SEÇENEKLERİ END =================
+
+  // ================= FONT SEÇENEKLERİ START =================
   function buildFonts() {
     fontContainer.innerHTML = '';
+
+    // Her yazı tipi için örnek önizleme butonu üret
     FONT_OPTIONS.forEach((f, idx) => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -155,9 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     currentFontName.innerText = FONT_OPTIONS[state.fontIndex].name;
   }
+  // ================= FONT SEÇENEKLERİ END =================
 
+  // ================= RENK PALETLERİ START =================
   function buildColorPalette(container, input, hexLabel, stateKey, description) {
     container.innerHTML = '';
+
+    // Hazır renkleri oluştur ve seçilen rengi state'e uygula
     COLOR_PRESETS.forEach(c => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -175,10 +266,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       container.appendChild(btn);
     });
+
+    // Güncel rengi hex etiketiyle göster
     hexLabel.innerText = state[stateKey].toUpperCase();
   }
 
   function buildSceneColorPalette() {
+    // Sahne renk butonlarını ilk çizimde oluştur
     if (!customSceneColorInput) {
       SCENE_COLOR_PRESETS.forEach(color => {
         const button = document.createElement('button');
@@ -218,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       sceneColorSwatches.appendChild(customColorLabel);
     }
 
+    // Seçili hazır veya özel sahne rengini görsel olarak belirt
     sceneColorSwatches.querySelectorAll('[data-scene-color]').forEach(button => {
       const isSelected = state.sceneColor.toLowerCase() === button.dataset.sceneColor;
       button.style.backgroundColor = button.dataset.sceneColor;
@@ -234,19 +329,24 @@ document.addEventListener('DOMContentLoaded', () => {
     customSceneColorInput.parentElement.classList.toggle('ring-2', isCustomColor);
     customSceneColorInput.parentElement.classList.toggle('ring-white', isCustomColor);
   }
+  // ================= RENK PALETLERİ END =================
 
+  // ================= SAHNE RENK SEÇİCİSİ START =================
   function setSceneColorPickerOpen(isOpen) {
     sceneColorPicker.classList.toggle('hidden', !isOpen);
     sceneColorToggle.setAttribute('aria-expanded', String(isOpen));
     if (!isOpen) sceneColorToggle.focus();
   }
+  // ================= SAHNE RENK SEÇİCİSİ END =================
 
-  // Canlı Simülasyonu Güncelleme Fonksiyonu
+  // ================= CANLI ÖNİZLEME VE TASARIMI GÜNCELLEME START =================
   function render() {
+    // Sahne arka plan rengini ve sahne paletini güncelle
     sceneContainer.style.setProperty('--scene-background', state.sceneColor);
     sceneColorPreview.style.backgroundColor = state.sceneColor;
     buildSceneColorPalette();
 
+    // Tabela metnini, karakter sayısını ve yazı tipini güncelle
     const textToDisplay = state.text.trim().length > 0 ? state.text : 'TABELA';
     liveSignboard.innerText = textToDisplay;
     
@@ -259,6 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const signBounds = liveSignboard.getBoundingClientRect();
     buildFonts();
 
+    // Renk paletlerini ve ışık efektlerinde kullanılacak renk değerlerini güncelle
     buildColorPalette(colorSwatches, customColorInput, colorHexText, 'lightColor', 'ışık');
     buildColorPalette(textColorSwatches, customTextColorInput, textColorHexText, 'textColor', 'yazı');
     buildColorPalette(sideColorSwatches, sideColorInput, sideColorHexText, 'sideColor', 'yan ışık');
@@ -270,6 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isBacklit = state.isLightOn && productType.id === 'backlit';
     const hasSideLighting = state.isLightOn && productType.id === 'front-side-lit';
     const isChrome = !state.isLightOn && productType.id === 'stainless';
+
+    // Seçilen ürün türüne göre sahne ve renk kontrollerinin görünürlüğünü ayarla
     ambientBackdrop.style.width = `${signBounds.width + (isBacklit ? 70 : 40)}px`;
     ambientBackdrop.style.height = `${signBounds.height + 20}px`;
     ambientBackdrop.style.filter = isBacklit ? 'blur(34px)' : '';
@@ -278,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     textColorControl.classList.toggle('hidden', isChrome);
     sideColorControl.classList.toggle('hidden', !hasSideLighting);
 
+    // Işıklı modelin renk ve ışık efektlerini uygula
     if (state.isLightOn) {
       liveSignboard.style.color = state.textColor;
 
@@ -298,10 +402,11 @@ document.addEventListener('DOMContentLoaded', () => {
       liveSignboard.classList.add('neon-pulse-active');
       ambientBackdrop.style.backgroundColor = state.lightColor;
 
-      lightOnBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md';
-      lightOffBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all';
+      lightOnBtn.className = 'py-2.5 px-3 rounded-lg border border-amber-400 flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md';
+      lightOffBtn.className = 'py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-white transition-all';
       specLightType.className = 'text-sm font-bold text-amber-300';
     } else {
+      // Işıksız malzemeye uygun yazı gölgesi ve mod görünümünü uygula
       if (productType.id === 'stainless') {
         liveSignboard.style.color = '#d1d5db';
         liveSignboard.style.textShadow = '1px 1px 0 #ffffff, 2px 3px 2px rgba(0,0,0,0.9), 0 0 12px rgba(203,213,225,0.35)';
@@ -315,30 +420,65 @@ document.addEventListener('DOMContentLoaded', () => {
       liveSignboard.classList.remove('neon-pulse-active');
       ambientBackdrop.style.opacity = '0.04';
 
-      lightOffBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-bold transition-all bg-slate-800 text-white shadow-md';
-      lightOnBtn.className = 'py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all';
+      lightOffBtn.className = 'py-2.5 px-3 rounded-lg border border-slate-600 flex items-center justify-center gap-2 text-xs font-bold transition-all bg-slate-800 text-white shadow-md';
+      lightOnBtn.className = 'py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-white transition-all';
       specLightType.className = 'text-sm font-bold text-slate-400';
     }
     specLightType.innerText = hasSideLighting ? `${productType.name} / Yan ${state.sideColor.toUpperCase()}` : productType.name;
 
+    // Harf yüksekliği seçeneklerini ve seçili değeri güncelle
+    renderHeightButtons();
+
+    // Cephe ölçülerini teknik özete ve teklif mesajına aktar
     const facadeHeight = state.facadeHeightCm ? `${state.facadeHeightCm} cm` : 'Belirtilmedi';
     const facadeWidth = state.facadeWidthCm ? `${state.facadeWidthCm} cm` : 'Belirtilmedi';
-    specFacadeHeight.innerText = facadeHeight;
+    if (specFacadeHeight) specFacadeHeight.innerText = facadeHeight;
     specFacadeWidth.innerText = facadeWidth;
 
+    // Ürün türüne göre teklifte gösterilecek renk detaylarını hazırla
     const colorDetails = [];
     if (!isChrome) colorDetails.push(`• Yazı Rengi: ${state.textColor.toUpperCase()}`);
     if (state.isLightOn) colorDetails.push(`• Işık Rengi: ${state.lightColor.toUpperCase()}`);
     if (hasSideLighting) colorDetails.push(`• Yan Işık Rengi: ${state.sideColor.toUpperCase()}`);
     const colorDetailsText = colorDetails.length ? `\n${colorDetails.join('\n')}` : '';
+        
+    
+    const liveSignboardProp = liveSignboard.getBoundingClientRect();
+    const LSBHeight = liveSignboardProp.height;
+    const LSBWidth = Math.max(liveSignboard.scrollWidth, liveSignboardProp.width);
+    const estWidth = Math.round((state.heightCm/LSBHeight)*LSBWidth);
+    specEstWidth.innerText = `~${estWidth} cm`;
+
+    // ===== BOŞLUKSUZ TAHMİNİ EN HESABI START =====
+    const measurementSign = liveSignboard.cloneNode(false);
+    measurementSign.innerText = textToDisplay.replace(/\s/g, '');
+    measurementSign.style.position = 'absolute';
+    measurementSign.style.visibility = 'hidden';
+    measurementSign.style.width = 'max-content';
+    measurementSign.style.maxWidth = 'none';
+    measurementSign.style.transition = 'none';
+    liveSignboard.parentElement.appendChild(measurementSign);
+    const measurementBounds = measurementSign.getBoundingClientRect();
+    const measurementWidth = Math.max(measurementSign.scrollWidth, measurementBounds.width);
+    const estWidth2 = Math.round((state.heightCm/measurementBounds.height)*measurementWidth);
+    measurementSign.remove();
+    // ===== BOŞLUKSUZ TAHMİNİ EN HESABI END =====
 
     if (quoteMessage) {
       quoteMessage.value = `Merhaba, siteden yapılandırdığım tabela için teklif almak istiyorum:\n• Yazı: "${state.text}"\n• Cephe Yüksekliği: ${facadeHeight}\n• Cephe Genişliği: ${facadeWidth}\n• Model: ${productType.name}${colorDetailsText}`;
     }
   }
+  // ================= CANLI ÖNİZLEME VE TASARIMI GÜNCELLEME END =================
 
-  // Özeti Panoya Kopyalama
+  // ================= TASARIM ÖZETİNİ PANOYA KOPYALAMA START =================
   function copySummaryText() {
+    const liveSignboardProp = liveSignboard.getBoundingClientRect();
+    const LSBHeight = liveSignboardProp.height;
+    const LSBWidth = Math.max(liveSignboard.scrollWidth, liveSignboardProp.width);
+    const estWidth = Math.round((state.heightCm/LSBHeight)*LSBWidth);
+
+
+
     const facadeHeight = state.facadeHeightCm ? `${state.facadeHeightCm} cm` : 'Belirtilmedi';
     const facadeWidth = state.facadeWidthCm ? `${state.facadeWidthCm} cm` : 'Belirtilmedi';
     const text = `--- FAALİYET TABELA SİPARİŞ ÖZETİ ---
@@ -364,8 +504,10 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
     }
     document.body.removeChild(el);
   }
+  // ================= TASARIM ÖZETİNİ PANOYA KOPYALAMA END =================
 
-  // Event Tanımlamaları
+  // ================= OLAY DİNLEYİCİLERİ START =================
+  // Tabela metni ve cephe ölçüsü değişiklikleri
   signText.addEventListener('input', (e) => {
     state.text = e.target.value;
     render();
@@ -381,16 +523,56 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
     render();
   });
 
+  // Özel harf yüksekliği girildiğinde hazır ve özel seçimlerin durumunu yenile
+  customHeightInput.addEventListener('input', () => {
+    const height = Number(customHeightInput.value);
+    if (height > 500) customHeightInput.value = '500';
+    state.heightCm = customHeightInput.value && Number.isFinite(height) && height > 0 ? Math.min(height, 500) : '';
+    heightButtonsContainer.querySelectorAll('button[data-height]').forEach(button => {
+      const isSelected = Number(button.dataset.height) === state.heightCm;
+      button.setAttribute('aria-pressed', String(isSelected));
+      button.className = isSelected
+        ? 'w-full py-2.5 px-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-slate-950 border-2 border-white shadow-lg shadow-amber-500/40 flex items-center justify-center gap-1'
+        : 'w-full py-2.5 px-1 rounded-xl text-xs font-semibold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700 flex items-center justify-center';
+      button.innerHTML = isSelected ? `<i class="fa-solid fa-check text-[10px]"></i> ${button.dataset.height}` : button.dataset.height;
+    });
+    const customHeightButton = heightButtonsContainer.lastElementChild;
+    const isCustomHeight = state.heightCm !== '' && !HEIGHT_OPTIONS.includes(state.heightCm);
+    customHeightButton.setAttribute('aria-pressed', String(isCustomHeight));
+    customHeightButton.setAttribute('aria-label', isCustomHeight ? `Özel yükseklik: ${state.heightCm} cm` : 'Özel yükseklik gir');
+    customHeightButton.className = isCustomHeight
+      ? 'w-full py-2.5 px-1 rounded-xl text-xs font-black transition-all bg-amber-400 text-slate-950 border-2 border-white shadow-lg shadow-amber-500/40 flex items-center justify-center gap-1'
+      : 'w-full py-2.5 px-1 rounded-xl text-xs font-semibold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 hover:border-slate-700 flex items-center justify-center';
+    customHeightButton.innerHTML = isCustomHeight ? '<i class="fa-solid fa-check text-[10px]"></i> Diğer' : 'Diğer';
+    selectedHeightBadge.innerText = state.heightCm ? `Seçili: ${state.heightCm} cm` : 'Yükseklik girin';
+  });
+
+  // Aydınlatma modu ve tabela türü seçimi
   lightOnBtn.addEventListener('click', () => {
     state.isLightOn = true;
+    state.isProductTypeOptionsOpen = false;
     render();
   });
 
   lightOffBtn.addEventListener('click', () => {
     state.isLightOn = false;
+    state.isProductTypeOptionsOpen = false;
     render();
   });
 
+  productTypeLabel.addEventListener('click', () => {
+    state.isProductTypeOptionsOpen = !state.isProductTypeOptionsOpen;
+    render();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && state.isProductTypeOptionsOpen) {
+      state.isProductTypeOptionsOpen = false;
+      render();
+    }
+  });
+
+  // Işık, yazı ve yan ışık için özel renk girişleri
   customColorInput.addEventListener('input', (e) => {
     state.lightColor = e.target.value;
     render();
@@ -410,6 +592,7 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
     copySignSummary.addEventListener('click', copySummaryText);
   }
 
+  // Sahne renk seçicisini açma, kapama ve Escape ile kapatma
   sceneColorToggle.addEventListener('click', () => {
     setSceneColorPickerOpen(sceneColorPicker.classList.contains('hidden'));
   });
@@ -424,6 +607,7 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
     }
   });
 
+  // Teklif formunu gönder ve sonucu kullanıcıya bildir
   if (quoteForm) {
     quoteForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -467,7 +651,10 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
     });
   }
 
-  // İlk başlatma
+  // ================= OLAY DİNLEYİCİLERİ END =================
+
+  // ================= İLK BAŞLATMA START =================
   render();
   document.fonts.ready.then(render);
+  // ================= İLK BAŞLATMA END =================
 });

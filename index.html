@@ -179,10 +179,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Ana Konfigüratör Kartı START -->
-      <div class="bg-slate-900/90 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+      <div class="bg-slate-900/90 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 items-start lg:grid-cols-12">
         
         <!-- Sol Kontrol Paneli Sütunu START -->
-        <div class="lg:col-span-5 xl:col-span-4 p-5 sm:p-7 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-6 bg-slate-950/70">
+        <div class="lg:col-span-5 xl:col-span-4 lg:row-span-2 p-5 sm:p-7 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-6 bg-slate-950/70">
           
           <!-- Kontrol: Metin Girişi START -->
           <div>
@@ -195,31 +195,26 @@
             <input type="text" id="signText" maxlength="28" value="FAALİYET" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-3 text-white font-semibold text-lg focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="Tabelanızı yazın...">
           </div>
           <!-- Kontrol: Metin Girişi END -->
-
-          <!-- Kontrol: Cephe Ölçüleri START -->
+           
+          <!-- Kontrol: Fiziksel Harf Yüksekliği START -->
           <div>
-            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
-              <i class="fa-solid fa-ruler-combined text-amber-400"></i> Cephe Ölçüleri
-            </label>
-            <p class="text-[11px] text-slate-400 mb-3">Cephe yüksekliğini ve genişliğini cm olarak girin.</p>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label for="facadeHeightInput" class="block text-[11px] font-medium text-slate-400 mb-1">Yükseklik</label>
-                <div class="relative">
-                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 80" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
-                </div>
-              </div>
-              <div>
-                <label for="facadeWidthInput" class="block text-[11px] font-medium text-slate-400 mb-1">Genişlik</label>
-                <div class="relative">
-                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
-                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
-                </div>
-              </div>
+            <div class="flex justify-between items-baseline mb-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <i class="fa-solid fa-ruler-vertical text-amber-400"></i> Fiziksel Harf Yüksekliği
+              </label>
+              <span id="selectedHeightBadge" class="text-xs font-bold text-amber-400 bg-amber-950/60 border border-amber-500/40 px-2 py-0.5 rounded">
+                Seçili: 30 cm
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3">Hesaplama ve imalat içindir; görsel boyutunu bozmaz. İsterseniz kendi ölçünüzü girebilirsiniz.</p>
+            
+            <!-- JS Tarafından Doldurulan Yükseklik Seçenekleri -->
+            <div id="heightButtonsContainer" class="grid grid-cols-5 gap-2"></div>
+            <div id="customHeightInputWrapper" class="hidden mt-2 flex justify-center">
+              <input type="number" id="customHeightInput" min="1" max="500" step="any" inputmode="decimal" placeholder="Özel yükseklik (cm)" aria-label="Özel harf yüksekliği (cm)" title="İstediğiniz harf yüksekliğini cm olarak girin" class="w-full max-w-[125px] min-w-0 py-2.5 px-3 rounded-xl text-sm font-semibold bg-slate-900 text-white border border-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400">
             </div>
           </div>
-          <!-- Kontrol: Cephe Ölçüleri END -->
+          <!-- Kontrol: Fiziksel Harf Yüksekliği END -->
 
           <!-- Kontrol: Aydınlatma Modu Seçimi START -->
           <div>
@@ -227,11 +222,11 @@
               <i class="fa-solid fa-lightbulb text-amber-400"></i> Aydınlatma Modu
             </label>
             <div class="grid grid-cols-2 gap-2 p-1 bg-slate-900 rounded-xl border border-slate-800">
-              <button type="button" id="lightOnBtn" class="py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md">
+              <button type="button" id="lightOnBtn" aria-controls="productTypeOptions" aria-expanded="false" class="py-2.5 px-3 rounded-lg border border-amber-400 flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md">
                 <i class="fa-solid fa-sun"></i>
                 Işıklı (Neon/LED)
               </button>
-              <button type="button" id="lightOffBtn" class="py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all">
+              <button type="button" id="lightOffBtn" aria-controls="productTypeOptions" aria-expanded="false" class="py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all">
                 <i class="fa-solid fa-moon"></i>
                 Işıksız (Kutu Harf)
               </button>
@@ -240,11 +235,15 @@
           <!-- Kontrol: Aydınlatma Modu Seçimi END -->
 
           <!-- Kontrol: Tabela Modeli Seçimi START -->
-          <div>
-            <label id="productTypeLabel" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
-              <i class="fa-solid fa-layer-group text-amber-400"></i> Işıklı Model
+          <div class="relative">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
+              <i class="fa-solid fa-layer-group text-amber-400"></i> Tabela Modeli
             </label>
-            <div id="productTypeOptions" class="grid grid-cols-1 gap-2" aria-labelledby="productTypeLabel"></div>
+            <button type="button" id="productTypeLabel" aria-controls="productTypeOptions" aria-expanded="false" class="w-full px-3 py-2.5 rounded-xl border border-slate-700 bg-slate-900 flex items-center justify-between gap-3 text-left text-xs font-semibold text-white hover:border-amber-400 transition-colors">
+              <span><i class="fa-solid fa-layer-group text-amber-400 mr-1"></i> Sadece Önden Işıklı</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform"></i>
+            </button>
+            <div id="productTypeOptions" class="hidden grid-cols-1 gap-2 absolute top-full left-0 right-0 z-30 mt-2 p-2 rounded-xl border border-slate-700 bg-slate-900 shadow-xl" aria-labelledby="productTypeLabel"></div>
           </div>
           <!-- Kontrol: Tabela Modeli Seçimi END -->
 
@@ -363,14 +362,14 @@
           <!-- Sahne Altı: Teknik Özet & Sipariş Paneli START -->
           <div class="z-10 bg-slate-950/85 backdrop-blur-md rounded-xl p-4 border border-slate-800/90">
             <!-- Teknik Parametreler Grid'i START -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-left">
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Harf Sayısı</span>
                 <span id="specLetterCount" class="text-sm font-bold text-white">7 Harf</span>
               </div>
               <div>
-                <span class="text-[11px] text-slate-400 block font-medium">Cephe Yüksekliği</span>
-                <span id="specFacadeHeight" class="text-sm font-bold text-amber-400 font-mono">Belirtilmedi</span>
+                <span class="text-[11px] text-slate-400 block font-medium">Tahmini Toplam En</span>
+                <span id="specEstWidth" class="text-sm font-bold text-cyan-400 font-mono">~155 cm</span>
               </div>
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Tabela Modeli</span>
@@ -379,6 +378,10 @@
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Cephe Genişliği</span>
                 <span id="specFacadeWidth" class="text-sm font-bold text-cyan-400 font-mono">Belirtilmedi</span>
+              </div>
+              <div>
+                <span class="text-[11px] text-slate-400 block font-medium">Cephe Yüksekliği</span>
+                <span id="specFacadeHeight" class="text-sm font-bold text-cyan-400 font-mono">Belirtilmedi</span>
               </div>
             </div>
             <!-- Teknik Parametreler Grid'i END -->
@@ -400,9 +403,40 @@
         </div>
         <!-- Sağ Canlı Önizleme Sahnesi Sütunu END -->
 
+        <!-- Sahnenin Altındaki Boş Alanda Cephe Ölçüleri START -->
+        <div class="lg:col-start-6 lg:col-span-7 xl:col-start-5 xl:col-span-8 p-5 sm:px-7 sm:py-5 border-t border-slate-800 bg-slate-950/70">
+          <div class="rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
+              <i class="fa-solid fa-ruler-combined text-amber-400"></i> Cephe Ölçüleri
+            </label>
+            <p class="text-[11px] text-slate-400 mb-3">Cephe yüksekliğini ve genişliğini cm olarak girin.</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="facadeHeightInput" class="block text-[11px] font-medium text-slate-400 mb-1">Yükseklik</label>
+                <div class="relative">
+                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 80" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
+                </div>
+              </div>
+              <div>
+                <label for="facadeWidthInput" class="block text-[11px] font-medium text-slate-400 mb-1">Genişlik</label>
+                <div class="relative">
+                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sahnenin Altındaki Boş Alanda Cephe Ölçüleri END -->
+
       </div>
       <!-- Ana Konfigüratör Kartı END -->
 
+    </div>
+    <div id="PriceSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      
     </div>
   </section>
   <!-- ================= DESIGNER SECTION END ================= -->
