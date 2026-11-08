@@ -179,7 +179,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Ana Konfigüratör Kartı START -->
-      <div class="bg-slate-900/90 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 items-start lg:grid-cols-12">
+      <div class="bg-slate-900/90 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden grid grid-cols-1 items-stretch lg:grid-cols-12">
         
         <!-- Sol Kontrol Paneli Sütunu START -->
         <div class="lg:col-span-5 xl:col-span-4 lg:row-span-2 p-5 sm:p-7 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-6 bg-slate-950/70">
@@ -222,11 +222,11 @@
               <i class="fa-solid fa-lightbulb text-amber-400"></i> Aydınlatma Modu
             </label>
             <div class="grid grid-cols-2 gap-2 p-1 bg-slate-900 rounded-xl border border-slate-800">
-              <button type="button" id="lightOnBtn" aria-controls="productTypeOptions" aria-expanded="false" class="py-2.5 px-3 rounded-lg border border-amber-400 flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md">
+              <button type="button" id="lightOnBtn" class="py-2.5 px-3 rounded-lg border border-amber-400 flex items-center justify-center gap-2 text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-md">
                 <i class="fa-solid fa-sun"></i>
                 Işıklı (Neon/LED)
               </button>
-              <button type="button" id="lightOffBtn" aria-controls="productTypeOptions" aria-expanded="false" class="py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all">
+              <button type="button" id="lightOffBtn" class="py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-all">
                 <i class="fa-solid fa-moon"></i>
                 Işıksız (Kutu Harf)
               </button>
@@ -234,8 +234,8 @@
           </div>
           <!-- Kontrol: Aydınlatma Modu Seçimi END -->
 
-          <!-- Kontrol: Tabela Modeli Seçimi START -->
-          <div class="relative">
+          <!-- Kontrol: Işıklı Tabela Modeli Seçimi START -->
+          <div id="productTypeControl" class="relative">
             <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
               <i class="fa-solid fa-layer-group text-amber-400"></i> Tabela Modeli
             </label>
@@ -245,7 +245,33 @@
             </button>
             <div id="productTypeOptions" class="hidden grid-cols-1 gap-2 absolute top-full left-0 right-0 z-30 mt-2 p-2 rounded-xl border border-slate-700 bg-slate-900 shadow-xl" aria-labelledby="productTypeLabel"></div>
           </div>
-          <!-- Kontrol: Tabela Modeli Seçimi END -->
+          <!-- Kontrol: Işıklı Tabela Modeli Seçimi END -->
+
+          <!-- Kontrol: Tabela Malzemesi Seçimi START -->
+          <div class="relative">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
+              <i class="fa-solid fa-cubes-stacked text-amber-400"></i> Tabela Malzemesi
+            </label>
+            <button type="button" id="materialLabel" aria-controls="materialOptions" aria-expanded="false" class="w-full px-3 py-2.5 rounded-xl border border-slate-700 bg-slate-900 flex items-center justify-between gap-3 text-left text-xs font-semibold text-white hover:border-amber-400 transition-colors">
+              <span><i class="fa-solid fa-cubes-stacked text-amber-400 mr-1"></i> Strafor</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform"></i>
+            </button>
+            <div id="materialOptions" class="hidden grid-cols-1 gap-2 absolute top-full left-0 right-0 z-30 mt-2 p-2 rounded-xl border border-slate-700 bg-slate-900 shadow-xl" aria-labelledby="materialLabel"></div>
+          </div>
+          <!-- Kontrol: Tabela Malzemesi Seçimi END -->
+
+          <!-- Kontrol: Krom Rengi Seçimi START -->
+          <div id="chromeFinishControl" class="relative hidden">
+            <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
+              <i class="fa-solid fa-palette text-amber-400"></i> Krom Rengi
+            </label>
+            <button type="button" id="chromeFinishLabel" aria-controls="chromeFinishOptions" aria-expanded="false" class="w-full px-3 py-2.5 rounded-xl border border-slate-700 bg-slate-900 flex items-center justify-between gap-3 text-left text-xs font-semibold text-white hover:border-amber-400 transition-colors">
+              <span>Gümüş</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform"></i>
+            </button>
+            <div id="chromeFinishOptions" class="hidden grid-cols-1 gap-2 absolute top-full left-0 right-0 z-30 mt-2 p-2 rounded-xl border border-slate-700 bg-slate-900 shadow-xl" aria-labelledby="chromeFinishLabel"></div>
+          </div>
+          <!-- Kontrol: Krom Rengi Seçimi END -->
 
           <!-- Kontrol: Font Stili Seçimi START -->
           <div>
@@ -362,7 +388,7 @@
           <!-- Sahne Altı: Teknik Özet & Sipariş Paneli START -->
           <div class="z-10 bg-slate-950/85 backdrop-blur-md rounded-xl p-4 border border-slate-800/90">
             <!-- Teknik Parametreler Grid'i START -->
-            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-left">
+            <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 text-left">
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Harf Sayısı</span>
                 <span id="specLetterCount" class="text-sm font-bold text-white">7 Harf</span>
@@ -374,6 +400,10 @@
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Tabela Modeli</span>
                 <span id="specLightType" class="text-sm font-bold text-amber-300">Neon / LED</span>
+              </div>
+              <div>
+                <span class="text-[11px] text-slate-400 block font-medium">Tabela Malzemesi</span>
+                <span id="specMaterial" class="text-sm font-bold text-amber-300">Strafor</span>
               </div>
               <div>
                 <span class="text-[11px] text-slate-400 block font-medium">Cephe Genişliği</span>
@@ -405,23 +435,23 @@
 
         <!-- Sahnenin Altındaki Boş Alanda Cephe Ölçüleri START -->
         <div class="lg:col-start-6 lg:col-span-7 xl:col-start-5 xl:col-span-8 p-5 sm:px-7 sm:py-5 border-t border-slate-800 bg-slate-950/70">
-          <div class="rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5">
+          <div class="h-full flex flex-col justify-center rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5">
             <label class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 mb-2">
               <i class="fa-solid fa-ruler-combined text-amber-400"></i> Cephe Ölçüleri
             </label>
             <p class="text-[11px] text-slate-400 mb-3">Cephe yüksekliğini ve genişliğini cm olarak girin.</p>
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label for="facadeHeightInput" class="block text-[11px] font-medium text-slate-400 mb-1">Yükseklik</label>
+                <label for="facadeWidthInput" class="block text-[11px] font-medium text-slate-400 mb-1">Genişlik</label>
                 <div class="relative">
-                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 80" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                   <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
                 </div>
               </div>
               <div>
-                <label for="facadeWidthInput" class="block text-[11px] font-medium text-slate-400 mb-1">Genişlik</label>
+                <label for="facadeHeightInput" class="block text-[11px] font-medium text-slate-400 mb-1">Yükseklik</label>
                 <div class="relative">
-                  <input type="number" id="facadeWidthInput" min="1" step="1" placeholder="Örn. 300" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                  <input type="number" id="facadeHeightInput" min="1" step="1" placeholder="Örn. 80" class="w-full bg-slate-950 border border-slate-700/80 rounded-xl px-3 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
                   <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">cm</span>
                 </div>
               </div>
@@ -435,8 +465,44 @@
 
     </div>
     <div id="PriceSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      
+      <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/90 p-5 sm:p-7 shadow-xl">
+        <div class="mb-6 border-b border-slate-800 pb-5 text-center">
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-wide text-amber-400">Fiyatlandırma</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3">
+          <div class="rounded-xl border border-slate-700 bg-slate-950/70 p-4 text-center">
+            <div class="mb-3 border-b border-slate-800 pb-2">
+              <span class="text-xs font-medium text-slate-400">Tabela Fiyatı</span>
+            </div>
+            <span class="block text-2xl font-bold text-white">XXX</span>
+          </div>
+
+          <span class="hidden md:block text-2xl font-semibold text-amber-400" aria-hidden="true">+</span>
+
+          <div class="rounded-xl border border-slate-700 bg-slate-950/70 p-4 text-center">
+            <div class="mb-3 border-b border-slate-800 pb-2">
+              <span class="text-xs font-medium text-slate-400">Cephe Fiyatı</span>
+            </div>
+            <span class="block text-2xl font-bold text-white">XXX</span>
+          </div>
+
+          <span class="hidden md:block text-2xl font-semibold text-amber-400" aria-hidden="true">=</span>
+
+          <div class="rounded-xl border border-amber-500/50 bg-amber-500/10 p-4 text-center">
+            <div class="mb-3 border-b border-amber-500/20 pb-2">
+              <span class="text-xs font-bold text-amber-300">Toplam Fiyat</span>
+            </div>
+            <span class="block text-2xl font-extrabold text-amber-400">XXX</span>
+          </div>
+        </div>
+          <div class="mt-6 border-t border-slate-800 pt-5">
+            <a href="#contact" class="mx-auto flex w-full max-w-md min-h-14 items-center justify-center gap-3 rounded-xl bg-amber-500 px-6 py-4 text-base sm:text-lg font-extrabold text-slate-950 shadow-lg shadow-amber-500/10 transition hover:bg-amber-400">
+              <i class="fa-solid fa-phone"></i>
+              <span>Bize Ulaşın</span>
+              <i class="fa-solid fa-arrow-right text-sm" aria-hidden="true"></i>
+            </a>
+          </div>
+      </div>
     </div>
   </section>
   <!-- ================= DESIGNER SECTION END ================= -->

@@ -32,20 +32,27 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Espresso', hex: '#291814' }
   ];
 
-  // Aydınlatma moduna göre gösterilen tabela türleri
+  // Işıklı tabela modelleri
   const PRODUCT_TYPES = {
     lighted: [
       { id: 'backlit', name: 'Arkadan Zemine Işıklı' },
       { id: 'front-lit', name: 'Sadece Önden Işıklı' },
       { id: 'front-side-lit', name: 'Önden ve Yandan Işıklı' },
       { id: 'side-lit', name: 'Sadece Yandan Işıklı' }
-    ],
-    unlighted: [
-      { id: 'foam', name: 'Strafor' },
-      { id: 'stainless', name: 'Paslanmaz Krom' },
-      { id: 'painted', name: 'Boyalı Harf' }
     ]
   };
+  const MATERIALS = [
+    { id: 'aluminum', name: 'Alüminyum' },
+    { id: 'chrome', name: 'Krom' },
+    { id: 'plexiglass', name: 'Pleksi' },
+    { id: 'foam', name: 'Strafor' }
+  ];
+  const CHROME_FINISHES = [
+    { id: 'bronze', name: 'Bronz', color: '#cd7f32' },
+    { id: 'gold', name: 'Gold', color: '#d4af37' },
+    { id: 'silver', name: 'Gümüş', color: '#d1d5db' },
+    { id: 'black', name: 'Siyah', color: '#1f2937' }
+  ];
   // ================= SABİTLER END =================
 
   // ================= TASARIM DURUMU START =================
@@ -59,7 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Aydınlatma ve tabela modeli seçimi
     isLightOn: true,
     isProductTypeOptionsOpen: false,
+    isMaterialOptionsOpen: false,
+    isChromeFinishOptionsOpen: false,
     productTypeId: 'front-lit',
+    materialId: 'aluminum',
+    chromeFinishId: 'silver',
     // Önizleme görünüm tercihleri
     fontIndex: 0,
     lightColor: '#38bdf8',
@@ -88,6 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightOffBtn = document.getElementById('lightOffBtn');
   const productTypeOptions = document.getElementById('productTypeOptions');
   const productTypeLabel = document.getElementById('productTypeLabel');
+  const productTypeControl = document.getElementById('productTypeControl');
+  const materialOptions = document.getElementById('materialOptions');
+  const materialLabel = document.getElementById('materialLabel');
+  const chromeFinishControl = document.getElementById('chromeFinishControl');
+  const chromeFinishOptions = document.getElementById('chromeFinishOptions');
+  const chromeFinishLabel = document.getElementById('chromeFinishLabel');
   const lightColorRow = document.getElementById('lightColorRow');
   const lightColorControl = document.getElementById('lightColorControl');
   const textColorControl = document.getElementById('textColorControl');
@@ -113,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const specLetterCount = document.getElementById('specLetterCount');
   const specFacadeHeight = document.getElementById('specFacadeHeight');
   const specLightType = document.getElementById('specLightType');
+  const specMaterial = document.getElementById('specMaterial');
   const specFacadeWidth = document.getElementById('specFacadeWidth');
   const quoteMessage = document.getElementById('quoteMessage');
   const copySignSummary = document.getElementById('copySignSummary');
@@ -131,8 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ================= TABELA MODELİ SEÇENEKLERİ START =================
   function renderProductTypeOptions() {
-    // Mod ile uyumlu ürün türlerini seç ve geçersiz seçimi düzelt
-    const options = state.isLightOn ? PRODUCT_TYPES.lighted : PRODUCT_TYPES.unlighted;
+    const options = PRODUCT_TYPES.lighted;
     if (!options.some(option => option.id === state.productTypeId)) {
       state.productTypeId = options[0].id;
     }
@@ -143,8 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
     productTypeOptions.classList.toggle('hidden', !state.isProductTypeOptionsOpen);
     productTypeOptions.classList.toggle('grid', state.isProductTypeOptionsOpen);
     productTypeLabel.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
-    lightOnBtn.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
-    lightOffBtn.setAttribute('aria-expanded', String(state.isProductTypeOptionsOpen));
     productTypeOptions.innerHTML = '';
 
     // Ürün türü seçim butonlarını oluştur
@@ -168,6 +183,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     return options.find(option => option.id === state.productTypeId);
+  }
+
+  function renderMaterialOptions() {
+    const selectedMaterial = MATERIALS.find(material => material.id === state.materialId);
+    materialLabel.innerHTML = `<span><i class="fa-solid fa-cubes-stacked text-amber-400 mr-1"></i> ${selectedMaterial.name}</span><i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform ${state.isMaterialOptionsOpen ? 'rotate-180' : ''}"></i>`;
+    materialOptions.classList.toggle('hidden', !state.isMaterialOptionsOpen);
+    materialOptions.classList.toggle('grid', state.isMaterialOptionsOpen);
+    materialLabel.setAttribute('aria-expanded', String(state.isMaterialOptionsOpen));
+    materialOptions.innerHTML = '';
+
+    MATERIALS.forEach(material => {
+      const isSelected = state.materialId === material.id;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-pressed', String(isSelected));
+      button.className = `w-full text-left px-3 py-2.5 rounded-lg border text-xs font-semibold transition-colors ${
+        isSelected
+          ? 'border-amber-400 bg-amber-950/40 text-white ring-1 ring-amber-400'
+          : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+      }`;
+      button.textContent = material.name;
+      button.addEventListener('click', () => {
+        state.materialId = material.id;
+        state.isMaterialOptionsOpen = false;
+        state.isChromeFinishOptionsOpen = false;
+        render();
+      });
+      materialOptions.appendChild(button);
+    });
+
+    chromeFinishControl.classList.toggle('hidden', state.materialId !== 'chrome');
+    const selectedFinish = CHROME_FINISHES.find(finish => finish.id === state.chromeFinishId);
+    chromeFinishLabel.innerHTML = `<span>${selectedFinish.name}</span><i class="fa-solid fa-chevron-down text-[10px] text-amber-400 transition-transform ${state.isChromeFinishOptionsOpen ? 'rotate-180' : ''}"></i>`;
+    chromeFinishOptions.classList.toggle('hidden', !state.isChromeFinishOptionsOpen);
+    chromeFinishOptions.classList.toggle('grid', state.isChromeFinishOptionsOpen);
+    chromeFinishLabel.setAttribute('aria-expanded', String(state.isChromeFinishOptionsOpen));
+    chromeFinishOptions.innerHTML = '';
+
+    CHROME_FINISHES.forEach(finish => {
+      const isSelected = state.chromeFinishId === finish.id;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-pressed', String(isSelected));
+      button.className = `w-full text-left px-3 py-2.5 rounded-lg border text-xs font-semibold transition-colors ${
+        isSelected
+          ? 'border-amber-400 bg-amber-950/40 text-white ring-1 ring-amber-400'
+          : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+      }`;
+      button.textContent = finish.name;
+      button.addEventListener('click', () => {
+        state.chromeFinishId = finish.id;
+        state.isChromeFinishOptionsOpen = false;
+        render();
+      });
+      chromeFinishOptions.appendChild(button);
+    });
+
+    return { material: selectedMaterial, finish: selectedFinish };
   }
   // ================= TABELA MODELİ SEÇENEKLERİ END =================
 
@@ -367,12 +440,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const rgba = (a) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
     const sideRgb = hexToRgb(state.sideColor);
     const sideRgba = (a) => `rgba(${sideRgb.r}, ${sideRgb.g}, ${sideRgb.b}, ${a})`;
-    const productType = renderProductTypeOptions();
+    const productType = state.isLightOn ? renderProductTypeOptions() : null;
+    const materialSelection = renderMaterialOptions();
     const isBacklit = state.isLightOn && productType.id === 'backlit';
     const hasSideLighting = state.isLightOn && productType.id === 'front-side-lit';
-    const isChrome = !state.isLightOn && productType.id === 'stainless';
+    const isChrome = materialSelection.material.id === 'chrome';
 
-    // Seçilen ürün türüne göre sahne ve renk kontrollerinin görünürlüğünü ayarla
+    // Seçilen model ve malzemeye göre kontrollerin görünürlüğünü ayarla
+    productTypeControl.classList.toggle('hidden', !state.isLightOn);
     ambientBackdrop.style.width = `${signBounds.width + (isBacklit ? 70 : 40)}px`;
     ambientBackdrop.style.height = `${signBounds.height + 20}px`;
     ambientBackdrop.style.filter = isBacklit ? 'blur(34px)' : '';
@@ -383,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Işıklı modelin renk ve ışık efektlerini uygula
     if (state.isLightOn) {
-      liveSignboard.style.color = state.textColor;
+      liveSignboard.style.color = isChrome ? materialSelection.finish.color : state.textColor;
 
       if (isBacklit) {
         liveSignboard.style.textShadow = `0 0 2px ${rgba(0.85)}, 0 0 8px ${rgba(0.7)}, 0 0 16px ${rgba(0.45)}`;
@@ -407,15 +482,18 @@ document.addEventListener('DOMContentLoaded', () => {
       specLightType.className = 'text-sm font-bold text-amber-300';
     } else {
       // Işıksız malzemeye uygun yazı gölgesi ve mod görünümünü uygula
-      if (productType.id === 'stainless') {
-        liveSignboard.style.color = '#d1d5db';
-        liveSignboard.style.textShadow = '1px 1px 0 #ffffff, 2px 3px 2px rgba(0,0,0,0.9), 0 0 12px rgba(203,213,225,0.35)';
-      } else if (productType.id === 'foam' || productType.id === 'painted') {
+      if (materialSelection.material.id === 'chrome') {
+        liveSignboard.style.color = materialSelection.finish.color;
+        liveSignboard.style.textShadow = '1px 1px 0 rgba(255,255,255,0.75), 2px 3px 2px rgba(0,0,0,0.9), 0 0 12px rgba(203,213,225,0.35)';
+      } else if (materialSelection.material.id === 'aluminum') {
+        liveSignboard.style.color = '#cbd5e1';
+        liveSignboard.style.textShadow = '1px 1px 0 #ffffff, 2px 3px 2px rgba(0,0,0,0.9), 0 0 12px rgba(203,213,225,0.3)';
+      } else if (materialSelection.material.id === 'foam') {
         liveSignboard.style.color = state.textColor;
         liveSignboard.style.textShadow = '1px 1px 0 rgba(255,255,255,0.3), 3px 4px 0 rgba(15,23,42,0.9), 5px 7px 8px rgba(0,0,0,0.65)';
       } else {
         liveSignboard.style.color = state.textColor;
-        liveSignboard.style.textShadow = '1px 1px 0 rgba(0,0,0,0.85), 3px 4px 7px rgba(0,0,0,0.65)';
+        liveSignboard.style.textShadow = '1px 1px 0 rgba(255,255,255,0.55), 2px 3px 2px rgba(0,0,0,0.85), 0 0 10px rgba(248,250,252,0.25)';
       }
       liveSignboard.classList.remove('neon-pulse-active');
       ambientBackdrop.style.opacity = '0.04';
@@ -424,7 +502,11 @@ document.addEventListener('DOMContentLoaded', () => {
       lightOnBtn.className = 'py-2.5 px-3 rounded-lg border border-slate-700 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:border-slate-500 hover:text-white transition-all';
       specLightType.className = 'text-sm font-bold text-slate-400';
     }
-    specLightType.innerText = hasSideLighting ? `${productType.name} / Yan ${state.sideColor.toUpperCase()}` : productType.name;
+    specLightType.innerText = state.isLightOn
+      ? (hasSideLighting ? `${productType.name} / Yan ${state.sideColor.toUpperCase()}` : productType.name)
+      : 'Işıksız (Kutu Harf)';
+    const materialName = isChrome ? `Krom - ${materialSelection.finish.name}` : materialSelection.material.name;
+    specMaterial.innerText = materialName;
 
     // Harf yüksekliği seçeneklerini ve seçili değeri güncelle
     renderHeightButtons();
@@ -440,6 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isChrome) colorDetails.push(`• Yazı Rengi: ${state.textColor.toUpperCase()}`);
     if (state.isLightOn) colorDetails.push(`• Işık Rengi: ${state.lightColor.toUpperCase()}`);
     if (hasSideLighting) colorDetails.push(`• Yan Işık Rengi: ${state.sideColor.toUpperCase()}`);
+    colorDetails.push(`• Tabela Malzemesi: ${materialName}`);
     const colorDetailsText = colorDetails.length ? `\n${colorDetails.join('\n')}` : '';
         
     
@@ -465,7 +548,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== BOŞLUKSUZ TAHMİNİ EN HESABI END =====
 
     if (quoteMessage) {
-      quoteMessage.value = `Merhaba, siteden yapılandırdığım tabela için teklif almak istiyorum:\n• Yazı: "${state.text}"\n• Cephe Yüksekliği: ${facadeHeight}\n• Cephe Genişliği: ${facadeWidth}\n• Model: ${productType.name}${colorDetailsText}`;
+      const modelDetail = state.isLightOn ? `\n• Tabela Modeli: ${productType.name}` : '';
+      quoteMessage.value = `Merhaba, siteden yapılandırdığım tabela için teklif almak istiyorum:\n• Yazı: "${state.text}"\n• Aydınlatma: ${state.isLightOn ? 'Işıklı' : 'Işıksız'}${modelDetail}\n• Cephe Yüksekliği: ${facadeHeight}\n• Cephe Genişliği: ${facadeWidth}${colorDetailsText}`;
     }
   }
   // ================= CANLI ÖNİZLEME VE TASARIMI GÜNCELLEME END =================
@@ -481,14 +565,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const facadeHeight = state.facadeHeightCm ? `${state.facadeHeightCm} cm` : 'Belirtilmedi';
     const facadeWidth = state.facadeWidthCm ? `${state.facadeWidthCm} cm` : 'Belirtilmedi';
+    const productType = state.isLightOn
+      ? PRODUCT_TYPES.lighted.find(option => option.id === state.productTypeId)
+      : null;
+    const material = MATERIALS.find(option => option.id === state.materialId);
+    const chromeFinish = CHROME_FINISHES.find(option => option.id === state.chromeFinishId);
+    const materialName = state.materialId === 'chrome' ? `Krom - ${chromeFinish.name}` : material.name;
+    const colorDetails = [];
+    if (state.materialId !== 'chrome') colorDetails.push(`Yazı Rengi: ${state.textColor.toUpperCase()}`);
+    if (state.isLightOn) colorDetails.push(`Işık Rengi: ${state.lightColor.toUpperCase()}`);
+    if (state.isLightOn && productType.id === 'front-side-lit') colorDetails.push(`Yan Işık Rengi: ${state.sideColor.toUpperCase()}`);
     const text = `--- FAALİYET TABELA SİPARİŞ ÖZETİ ---
 Yazı: "${state.text}"
 Harf Sayısı: ${state.text.length}
 Cephe Yüksekliği: ${facadeHeight}
 Cephe Genişliği: ${facadeWidth}
 Aydınlatma: ${state.isLightOn ? 'Işıklı (Neon / LED)' : 'Işıksız (Kutu Harf)'}
-Model: ${PRODUCT_TYPES[state.isLightOn ? 'lighted' : 'unlighted'].find(option => option.id === state.productTypeId).name}
-${colorDetails.map(detail => detail.replace(/^• /, '')).join('\n')}
+${state.isLightOn ? `Tabela Modeli: ${productType.name}\n` : ''}Tabela Malzemesi: ${materialName}
+${colorDetails.join('\n')}
 Font: ${FONT_OPTIONS[state.fontIndex].name}
 -------------------------------------`;
 
@@ -551,23 +645,49 @@ Font: ${FONT_OPTIONS[state.fontIndex].name}
   lightOnBtn.addEventListener('click', () => {
     state.isLightOn = true;
     state.isProductTypeOptionsOpen = false;
+    state.isMaterialOptionsOpen = false;
+    state.isChromeFinishOptionsOpen = false;
     render();
   });
 
   lightOffBtn.addEventListener('click', () => {
     state.isLightOn = false;
     state.isProductTypeOptionsOpen = false;
+    state.isMaterialOptionsOpen = false;
+    state.isChromeFinishOptionsOpen = false;
     render();
   });
 
   productTypeLabel.addEventListener('click', () => {
     state.isProductTypeOptionsOpen = !state.isProductTypeOptionsOpen;
+    state.isMaterialOptionsOpen = false;
+    state.isChromeFinishOptionsOpen = false;
+    render();
+  });
+
+  materialLabel.addEventListener('click', () => {
+    state.isMaterialOptionsOpen = !state.isMaterialOptionsOpen;
+    state.isProductTypeOptionsOpen = false;
+    state.isChromeFinishOptionsOpen = false;
+    render();
+  });
+
+  chromeFinishLabel.addEventListener('click', () => {
+    state.isChromeFinishOptionsOpen = !state.isChromeFinishOptionsOpen;
+    state.isProductTypeOptionsOpen = false;
+    state.isMaterialOptionsOpen = false;
     render();
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && state.isProductTypeOptionsOpen) {
+    if (event.key === 'Escape' && (
+      state.isProductTypeOptionsOpen ||
+      state.isMaterialOptionsOpen ||
+      state.isChromeFinishOptionsOpen
+    )) {
       state.isProductTypeOptionsOpen = false;
+      state.isMaterialOptionsOpen = false;
+      state.isChromeFinishOptionsOpen = false;
       render();
     }
   });
