@@ -3,6 +3,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fiziksel harf yüksekliği için hazır ölçüler
   const HEIGHT_OPTIONS = [15, 20, 25, 30, 35, 40, 45, 50, 55];
 
+  //Fiyat Hesaplamasında Kullanılan Değerler;
+  const PRICE_VALUES = {
+    'backlitAluminum': {c1: 26.9600, c2: 54.1924},
+    'backlitChromeBronze': {c1: 32.3867, c2: 60.5634},
+    'backlitChromeGold': {c1: 30.0736, c2: 59.2190},
+    'backlitChromeSilver': {c1: 28.9948, c2: 55.6251},
+    'backlitChromeBlack': {c1: 32.3867, c2: 60.5634},
+    'otherlitAluminum': {c1: 24.3455, c2: 47.6363},
+    'otherlitChromeBronze': {c1: 45.3338, c2: 84.8556},
+    'otherlitChromeGold': {c1: 44.1459, c2: 80.4959},
+    'otherlitChromeSilver': {c1: 39.1523, c2: 75.4303},
+    'otherlitChromeBlack': {c1: 45.3338, c2: 84.8556},
+    'otherlitPlexiglass': {c1: 28.5121, c2: 47.0179},
+    'nolightAluminum': {c1: 28.4603, c2: 50.5738},
+    'nolightChromeBronze': {c1: 32.2067, c2: 57.1660},
+    'nolightChromeGold': {c1: 30.1888, c2: 53.7137},
+    'nolightChromeSilver': {c1: 28.5121, c2: 47.0179},
+    'nolightChromeBlack': {c1: 32.2067, c2: 57.1660},
+    'nolightPlexiglass': {c1: 1.0000, c2: 1.0000},
+    'nolightFoam': {c1: 1.0000, c2: 1.0000}
+
+
+
+  };
+
   // Önizlemede kullanılabilen yazı tipleri
   const FONT_OPTIONS = [
     { id: 'tilt', name: 'Tilt Neon', family: "'Tilt Neon', cursive" },
@@ -93,6 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const charCountLabel = document.getElementById('charCountLabel');
   const facadeHeightInput = document.getElementById('facadeHeightInput');
   const facadeWidthInput = document.getElementById('facadeWidthInput');
+
+
+  //Fiyatlandırma alanları
+  const signPrice = document.getElementById('signPrice');
+  const facadePrice = document.getElementById('facadePrice');
+  const totalPrice = document.getElementById('totalPrice');
 
   // Aydınlatma ve ürün türü kontrolleri
   const lightOnBtn = document.getElementById('lightOnBtn');
@@ -546,6 +577,114 @@ document.addEventListener('DOMContentLoaded', () => {
     const estWidth2 = Math.round((state.heightCm/measurementBounds.height)*measurementWidth);
     measurementSign.remove();
     // ===== BOŞLUKSUZ TAHMİNİ EN HESABI END =====
+
+    if(signPrice) {
+    if (state.isLightOn) {
+      if (state.productTypeId === 'backlit') {
+        if(state.materialId == 'aluminum') {
+        c1 = PRICE_VALUES.backlitAluminum.c1;
+        c2 = PRICE_VALUES.backlitAluminum.c2;
+        }
+        if(state.materialId == 'chrome') {
+          if(state.chromeFinishId == 'bronze') {
+            c1 = PRICE_VALUES.backlitChromeBronze.c1;
+            c2 = PRICE_VALUES.backlitChromeBronze.c2;
+          }
+          if(state.chromeFinishId == 'gold') {
+            c1 = PRICE_VALUES.backlitChromeGold.c1;
+            c2 = PRICE_VALUES.backlitChromeGold.c2;
+          }
+          if(state.chromeFinishId == 'silver') {
+            c1 = PRICE_VALUES.backlitChromeSilver.c1;
+            c2 = PRICE_VALUES.backlitChromeSilver.c2;
+          }
+          if(state.chromeFinishId == 'black') {
+            c1 = PRICE_VALUES.backlitChromeBlack.c1;
+            c2 = PRICE_VALUES.backlitChromeBlack.c2;
+          }
+        }
+        if(state.materialId == 'plexiglass') {
+        c1 = PRICE_VALUES.backlitPlexiglass.c1;
+        c2 = PRICE_VALUES.backlitPlexiglass.c2;
+        }
+        if(state.materialId == 'foam') {
+        c1 = PRICE_VALUES.backlitFoam.c1;
+        c2 = PRICE_VALUES.backlitFoam.c2;
+        }
+       
+      }
+      if (state.productTypeId !== 'backlit') {
+        if(state.materialId == 'aluminum') {
+        c1 = PRICE_VALUES.otherlitAluminum.c1;
+        c2 = PRICE_VALUES.otherlitAluminum.c2;
+        }
+        if(state.materialId == 'chrome') {
+          if(state.chromeFinishId == 'bronze') {
+            c1 = PRICE_VALUES.otherlitChromeBronze.c1;
+            c2 = PRICE_VALUES.otherlitChromeBronze.c2;
+          }
+          if(state.chromeFinishId == 'gold') {
+            c1 = PRICE_VALUES.otherlitChromeGold.c1;
+            c2 = PRICE_VALUES.otherlitChromeGold.c2;
+          }
+          if(state.chromeFinishId == 'silver') {
+            c1 = PRICE_VALUES.otherlitChromeSilver.c1;
+            c2 = PRICE_VALUES.otherlitChromeSilver.c2;
+          }
+          if(state.chromeFinishId == 'black') {
+            c1 = PRICE_VALUES.otherlitChromeBlack.c1;
+            c2 = PRICE_VALUES.otherlitChromeBlack.c2;
+          }
+        }
+        if(state.materialId == 'plexiglass') {
+        c1 = PRICE_VALUES.otherlitPlexiglass.c1;
+        c2 = PRICE_VALUES.otherlitPlexiglass.c2;
+        }
+        if(state.materialId == 'foam') {
+        c1 = PRICE_VALUES.otherlitFoam.c1;
+        c2 = PRICE_VALUES.otherlitFoam.c2;
+        }
+
+      }
+      
+    }
+    else {
+      if(state.materialId == 'aluminum') {
+        c1 = PRICE_VALUES.unlitAluminum.c1;
+        c2 = PRICE_VALUES.unlitAluminum.c2;
+      }
+      if(state.materialId == 'chrome') {
+        if(state.chromeFinishId == 'bronze') {
+          c1 = PRICE_VALUES.unlitChromeBronze.c1;
+          c2 = PRICE_VALUES.unlitChromeBronze.c2;
+        }
+        if(state.chromeFinishId == 'gold') {
+          c1 = PRICE_VALUES.unlitChromeGold.c1;
+          c2 = PRICE_VALUES.unlitChromeGold.c2;
+        }
+        if(state.chromeFinishId == 'silver') {
+          c1 = PRICE_VALUES.unlitChromeSilver.c1;
+          c2 = PRICE_VALUES.unlitChromeSilver.c2;
+        }
+        if(state.chromeFinishId == 'black') {
+          c1 = PRICE_VALUES.unlitChromeBlack.c1;
+          c2 = PRICE_VALUES.unlitChromeBlack.c2;
+        }
+      }
+      if(state.materialId == 'plexiglass') {
+      c1 = PRICE_VALUES.unlitPlexiglass.c1;
+      c2 = PRICE_VALUES.unlitPlexiglass.c2;
+      }
+      if(state.materialId == 'foam') {
+      c1 = PRICE_VALUES.unlitFoam.c1;
+      c2 = PRICE_VALUES.unlitFoam.c2;
+     }
+
+
+    }
+    formula = (c1*state.heightCm*state.text.replace(/\s/g, '').length) + c2*estWidth; 
+    signPrice.innerText = `${Math.round(formula)} TL`;
+  }
 
     if (quoteMessage) {
       const modelDetail = state.isLightOn ? `\n• Tabela Modeli: ${productType.name}` : '';
