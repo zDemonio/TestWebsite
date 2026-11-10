@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     'otherlitChromeSilver': {c1: 39.1523, c2: 75.4303},
     'otherlitChromeBlack': {c1: 45.3338, c2: 84.8556},
     'otherlitPlexiglass': {c1: 28.5121, c2: 47.0179},
-    'nolightAluminum': {c1: 28.4603, c2: 50.5738},
-    'nolightChromeBronze': {c1: 32.2067, c2: 57.1660},
-    'nolightChromeGold': {c1: 30.1888, c2: 53.7137},
-    'nolightChromeSilver': {c1: 28.5121, c2: 47.0179},
-    'nolightChromeBlack': {c1: 32.2067, c2: 57.1660},
-    'nolightPlexiglass': {c1: 1.0000, c2: 1.0000},
-    'nolightFoam': {c1: 1.0000, c2: 1.0000}
+    'unlitAluminum': {c1: 28.4603, c2: 50.5738},
+    'unlitChromeBronze': {c1: 32.2067, c2: 57.1660},
+    'unlitChromeGold': {c1: 30.1888, c2: 53.7137},
+    'unlitChromeSilver': {c1: 28.5121, c2: 47.0179},
+    'unlitChromeBlack': {c1: 32.2067, c2: 57.1660},
+    'unlitPlexiglass': {c1: 1.0000, c2: 1.0000},
+    'unlitFoam': {c1: 1.0000, c2: 1.0000}
 
 
 
